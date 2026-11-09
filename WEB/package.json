@@ -10,6 +10,7 @@
     "test": "playwright test",
     "test:api": "playwright test tests/api.spec.ts",
     "test:browser": "playwright test tests/browser.spec.ts",
+    "test:launcher": "node --test tests/launcher.test.cjs",
     "typecheck": "tsc --noEmit",
     "docs": "node scripts/generate-slides.mjs"
   },

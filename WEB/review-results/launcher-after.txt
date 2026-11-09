@@ -1,0 +1,12 @@
+✔ Go Live redirects to an already running Nike Store without starting another process (77.2051ms)
+✔ Go Live shows a refresh page while startup is pending and redirects after readiness (19.4679ms)
+✔ launcher never serves project secrets or source paths (18.7702ms)
+✔ Five Server configuration works from either workspace folder (1.9084ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 230.6313

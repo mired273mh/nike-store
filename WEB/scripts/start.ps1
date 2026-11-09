@@ -1,4 +1,4 @@
-param([switch]$Production, [int]$Port = 3000)
+param([switch]$Production, [switch]$OpenBrowser, [int]$Port = 3000)
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
 $runtimeRoot = Join-Path $env:LOCALAPPDATA 'NikeStoreRuntime'
@@ -17,7 +17,33 @@ if (!$apiListener) {
     Set-Content -LiteralPath (Join-Path $appRuntime 'php.pid') -Value $apiProcess.Id
 }
 Push-Location $projectRoot
+$browserJob = $null
 try {
+    $websiteUrl = "http://127.0.0.1:$Port"
+    if (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) {
+        try { $health = Invoke-RestMethod -Uri "$websiteUrl/api/health" -TimeoutSec 3 }
+        catch { throw "Cong $Port dang duoc su dung. Vui long dong ung dung khac hoac chon cong khac." }
+        if ($health.status -ne 'ok' -or $health.backend -ne 'PHP' -or $health.database -ne 'MySQL') { throw "Cong $Port khong phai Nike Store." }
+        Write-Output "Nike Store dang chay: $websiteUrl"
+        if ($OpenBrowser) { Start-Process $websiteUrl }
+        return
+    }
+    if ($OpenBrowser) {
+        $browserJob = Start-Job -ArgumentList $websiteUrl -ScriptBlock {
+            param($url)
+            for ($attempt = 0; $attempt -lt 120; $attempt++) {
+                try {
+                    $health = Invoke-RestMethod -Uri "$url/api/health" -TimeoutSec 2
+                    if ($health.status -eq 'ok' -and $health.backend -eq 'PHP' -and $health.database -eq 'MySQL') { Start-Process $url; return }
+                } catch { }
+                Start-Sleep -Milliseconds 500
+            }
+        }
+    }
     if ($Production) { npm.cmd run build; if ($LASTEXITCODE -ne 0) { throw 'Build that bai.' }; npm.cmd run start -- --hostname 127.0.0.1 --port $Port }
     else { npm.cmd run dev -- --hostname 127.0.0.1 --port $Port }
-} finally { Pop-Location }
+    if ($LASTEXITCODE -ne 0) { throw 'Website khong khoi dong duoc. Xem loi o tren.' }
+} finally {
+    if ($browserJob) { Stop-Job -Job $browserJob -ErrorAction SilentlyContinue; Remove-Job -Job $browserJob -ErrorAction SilentlyContinue }
+    Pop-Location
+}

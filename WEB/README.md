@@ -4,6 +4,10 @@ Bài tập nhóm Lập trình Web: website bán hàng với **backend PHP + MySQ
 
 ## Chạy trên Windows
 
+**Chạy nhanh:** trong VS Code đã cài **Live Server (Five Server)**, bấm **Go Live** hoặc mở Command Palette và chọn **Five-Server: Start**. Cấu hình dự án sẽ khởi động Nike Store và chuyển trình duyệt vào website. Nếu vừa thêm cấu hình, bấm Stop rồi Go Live lại hoặc Reload Window một lần.
+
+Ngoài VS Code, bấm đúp **`CHAY-WEB.cmd`** trong File Explorer. PHP/MySQL và thư viện được chuẩn bị tự động nếu chưa có; cần cài Node.js trước. Nếu website đang chạy, nút này mở lại website hiện tại và không tạo server trùng cổng.
+
 Cần Node.js và mạng cho lần cài đầu. Mở PowerShell tại thư mục này:
 
 ```powershell

@@ -6,6 +6,8 @@ Mã nguồn ứng dụng nằm trong thư mục [`WEB/`](WEB/).
 
 ## Chạy trên Windows
 
+**Nhanh nhất:** bấm **Go Live** với extension **Live Server (Five Server)** trong VS Code. Hoặc bấm đúp **`CHAY-WEB.cmd`** trong File Explorer. Bộ khởi động tự chuẩn bị/chạy ứng dụng và mở trình duyệt; nếu website đã chạy thì mở lại ngay.
+
 ```powershell
 cd WEB
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup.ps1

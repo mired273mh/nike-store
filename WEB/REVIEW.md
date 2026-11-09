@@ -62,6 +62,10 @@ Runtime thực chạy: Windows, PHP 8.4.27, MySQL 8.4.13, Node.js 26.13.0, Next.
 
 Có file `backend/database/demo.sql` chỉ chứa seed sản phẩm và tài khoản demo tổng hợp, không chứa đơn/khách cũ. Gói source không kèm `.env`, runtime binary, dữ liệu import, sessions, OTP, outbox, uploads cá nhân hoặc node_modules.
 
+## Chạy nhanh trong VS Code
+
+Đã bổ sung cách chạy nhanh bằng **Go Live (Five Server)** và `CHAY-WEB.cmd`: khởi động PHP/MySQL/Next.js khi cần, mở lại website nếu đã chạy và tránh lỗi trùng cổng. Có thêm **4/4 kiểm tra launcher đạt** (`npm run test:launcher`) và đã thử khởi động mới trên cổng riêng; các kiểm tra này tách khỏi bộ 82 ca nghiệp vụ bên trên.
+
 ## Những việc cần thông tin hoặc dịch vụ bên ngoài
 
 1. Nhóm điền tên/MSSV, lớp, giảng viên và đánh giá đóng góp thực tế; phần thuyết trình phải do nhóm chuẩn bị và thực hiện. Chỉ tên đề tài Website Nike Store đã được người dùng xác nhận.
