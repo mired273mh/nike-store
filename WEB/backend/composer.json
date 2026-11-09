@@ -1,0 +1,5 @@
+{
+  "name": "student/nike-store-api",
+  "description": "PHP + MySQL API for Nike Store coursework",
+  "require": {"php": "^8.2", "ext-pdo": "*", "ext-pdo_mysql": "*", "ext-mbstring": "*", "ext-fileinfo": "*", "phpmailer/phpmailer": "^6.10"}
+}

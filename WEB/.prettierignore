@@ -1,0 +1,11 @@
+node_modules
+.next
+.next-test
+.runtime
+backend/vendor
+backend/storage
+review-results
+playwright-report
+test-results
+docs/Nike-Store-Slides.html
+package-lock.json

@@ -1,0 +1,8 @@
+# Generated submission archive; source and slides are tracked directly.
+/Website-Nike-Store-Submission.zip
+
+# Local credentials and runtime data.
+.env
+.env.*
+!.env.example
+*.secret

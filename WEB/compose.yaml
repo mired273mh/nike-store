@@ -1,0 +1,40 @@
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: nike_store
+      MYSQL_USER: nike_app
+      MYSQL_PASSWORD: ${NIKE_DB_PASSWORD:?Set NIKE_DB_PASSWORD}
+    volumes: [mysql_data:/var/lib/mysql]
+    healthcheck:
+      test: [CMD-SHELL, 'mysqladmin ping -h localhost --silent']
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  api:
+    build: {context: ., dockerfile: backend/Dockerfile}
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: nike_store
+      DB_USERNAME: nike_app
+      DB_PASSWORD: ${NIKE_DB_PASSWORD}
+      APP_ENV: development
+      APP_ORIGINS: http://localhost:3000,http://127.0.0.1:3000
+      COOKIE_SECURE: 0
+      MAIL_TRANSPORT: file
+    depends_on: {db: {condition: service_healthy}}
+    volumes: [app_storage:/app/backend/storage]
+    healthcheck:
+      test: [CMD, php, -r, "exit(file_get_contents('http://127.0.0.1:8000/api/health') ? 0 : 1);"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+  web:
+    build: .
+    ports: ['127.0.0.1:3000:3000']
+    depends_on: {api: {condition: service_healthy}}
+volumes:
+  mysql_data:
+  app_storage:

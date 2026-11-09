@@ -1,0 +1,13 @@
+node_modules
+.next
+.next-test
+.runtime
+.runtime*
+.env*
+backend/.env
+backend/storage/*
+backend/vendor
+playwright-report
+test-results
+review-results
+.git

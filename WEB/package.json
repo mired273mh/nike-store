@@ -1,0 +1,40 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "playwright test",
+    "test:api": "playwright test tests/api.spec.ts",
+    "test:browser": "playwright test tests/browser.spec.ts",
+    "typecheck": "tsc --noEmit",
+    "docs": "node scripts/generate-slides.mjs"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.40.0",
+    "lucide-react": "^1.17.0",
+    "next": "16.2.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "tailwind-merge": "^3.6.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.0",
+    "@prettier/plugin-php": "^0.26.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.6",
+    "jszip": "^3.10.2",
+    "pptxgenjs": "^4.0.1",
+    "prettier": "^3.9.10",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

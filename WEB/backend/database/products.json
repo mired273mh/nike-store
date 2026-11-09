@@ -1,0 +1,452 @@
+[
+  {
+    "id": "nike-air-max-alpha-5",
+    "name": "Nike Air Max Alpha Trainer 5",
+    "description": "Bản lĩnh tập luyện đỉnh cao với đệm Air Max êm ái. Thích hợp cho các bài tập tạ nặng, HIIT và tập luyện cường độ cao. Đế phẳng rộng tăng cường độ bám và ổn định tối đa.",
+    "price": 2450000,
+    "originalPrice": 2890000,
+    "category": "SportShoes",
+    "subcategory": "Giày tập luyện",
+    "images": [
+      "/images/shoe-running.jpg"
+    ],
+    "sizes": [
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      {
+        "name": "Red Bold",
+        "hex": "#ff1e27"
+      },
+      {
+        "name": "Pure Black",
+        "hex": "#09090b"
+      },
+      {
+        "name": "White Grey",
+        "hex": "#d4d4d8"
+      }
+    ],
+    "rating": 4.8,
+    "reviewsCount": 124,
+    "featured": true,
+    "trending": true,
+    "inStock": true
+  },
+  {
+    "id": "nike-pegasus-40-running",
+    "name": "Nike Pegasus 40 Premium Running",
+    "description": "Trải nghiệm năng lượng hoàn trả phi thường với dòng giày chạy bộ quốc dân Pegasus 40. Đệm React nhẹ cùng hai túi đệm Zoom Air giúp từng bước chạy êm ái và tràn đầy năng lượng bứt phá.",
+    "price": 3600000,
+    "originalPrice": 4200000,
+    "category": "SportShoes",
+    "subcategory": "Giày chạy bộ",
+    "images": [
+      "/images/shoe-running.jpg"
+    ],
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43"
+    ],
+    "colors": [
+      {
+        "name": "Neon Pink & White",
+        "hex": "#f43f5e"
+      },
+      {
+        "name": "Triple White",
+        "hex": "#ffffff"
+      },
+      {
+        "name": "Core Black",
+        "hex": "#18181b"
+      }
+    ],
+    "rating": 4.9,
+    "reviewsCount": 310,
+    "featured": true,
+    "trending": true,
+    "inStock": true
+  },
+  {
+    "id": "nike-windrunner-jacket",
+    "name": "Nike Windrunner Running Jacket",
+    "description": "Áo khoác thể thao cản gió siêu nhẹ, chống nước nhẹ, giữ cơ thể luôn khô ráo và ấm áp trong mọi điều kiện thời tiết. Thiết kế xương cá chevron mang tính biểu tượng của Nike.",
+    "price": 1850000,
+    "originalPrice": 2200000,
+    "category": "Clothing",
+    "subcategory": "Áo khoác thể thao",
+    "images": [
+      "/images/hoodie.jpg"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      {
+        "name": "Varsity Red & Black",
+        "hex": "#b91c1c"
+      },
+      {
+        "name": "Dark Grey",
+        "hex": "#3f3f46"
+      }
+    ],
+    "rating": 4.6,
+    "reviewsCount": 89,
+    "featured": false,
+    "trending": true,
+    "inStock": true
+  },
+  {
+    "id": "nike-club-fleece-jacket",
+    "name": "Nike Sportswear Club Fleece Jacket",
+    "description": "Dòng áo khoác nỉ hoodie và khóa kéo phong cách thời trang đường phố của Nike. Chất vải mềm ấm áp tạo điểm nhấn tối giản, năng động hàng ngày.",
+    "price": 1500000,
+    "category": "Clothing",
+    "subcategory": "Áo khoác lifestyle",
+    "images": [
+      "/images/hoodie.jpg"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      {
+        "name": "White Stripe Black",
+        "hex": "#09090b"
+      },
+      {
+        "name": "Crimson Red",
+        "hex": "#dc2626"
+      }
+    ],
+    "rating": 4.7,
+    "reviewsCount": 156,
+    "featured": false,
+    "trending": false,
+    "inStock": true
+  },
+  {
+    "id": "nike-metcon-9-amp",
+    "name": "Nike Metcon 9 AMP Elite",
+    "description": "Dòng giày tập luyện Crossfit tối tân nhất của Nike. Tấm Hyperlift lớn hơn ở gót chân giúp ổn định tối đa khi tập Squat, Deadlift. Vùng bọc cao su hỗ trợ leo dây thừng chống mài mòn.",
+    "price": 3890000,
+    "originalPrice": 4290000,
+    "category": "SportShoes",
+    "subcategory": "Giày tập luyện",
+    "images": [
+      "/images/shoe-running.jpg"
+    ],
+    "sizes": [
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      {
+        "name": "Volt & Fire Red",
+        "hex": "#e11d48"
+      },
+      {
+        "name": "Obsidian Blue",
+        "hex": "#1e3a8a"
+      }
+    ],
+    "rating": 4.9,
+    "reviewsCount": 72,
+    "featured": true,
+    "trending": false,
+    "inStock": true
+  },
+  {
+    "id": "nike-therma-fit-hoodie",
+    "name": "Nike Therma-FIT Elite Hoodie",
+    "description": "Thiết kế giúp giữ ấm tối đa khi tập luyện ngoài trời lạnh. Chất vải Therma-FIT cao cấp có khả năng quản lý nhiệt cơ thể tự nhiên và form đứng thể thao tinh gọn.",
+    "price": 2100000,
+    "category": "Clothing",
+    "subcategory": "Áo nỉ Hoodie",
+    "images": [
+      "/images/hoodie.jpg"
+    ],
+    "sizes": [
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      {
+        "name": "Chalk White",
+        "hex": "#f5f5f4"
+      },
+      {
+        "name": "Carbon Black",
+        "hex": "#27272a"
+      }
+    ],
+    "rating": 4.8,
+    "reviewsCount": 198,
+    "featured": true,
+    "trending": true,
+    "inStock": true
+  },
+  {
+    "id": "nike-challenger-shorts",
+    "name": "Nike Challenger Dri-FIT Shorts",
+    "description": "Quần short chạy bộ tích hợp quần lót lưới bên trong thoải mái và co giãn tốt. Công nghệ Dri-FIT thấm hút mồ hôi nhanh giúp bạn tự tin bứt phá cự ly.",
+    "price": 750000,
+    "originalPrice": 890000,
+    "category": "Clothing",
+    "subcategory": "Quần short thể thao",
+    "images": [
+      "/images/nike-challenger-shorts.png"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      {
+        "name": "Core Black",
+        "hex": "#09090b"
+      },
+      {
+        "name": "Hyper Red",
+        "hex": "#ef4444"
+      }
+    ],
+    "rating": 4.5,
+    "reviewsCount": 143,
+    "featured": false,
+    "trending": false,
+    "inStock": true
+  },
+  {
+    "id": "nike-invincible-3-cushion",
+    "name": "Nike Invincible 3 Cushion Running",
+    "description": "Mang lại sự thoải mái vượt trội hàng ngày nhờ công nghệ bọt ZoomX siêu dày. Giày có khả năng nâng đỡ và bảo vệ tối đa cho hệ xương khớp trên những chặng chạy dài.",
+    "price": 4900000,
+    "originalPrice": 5500000,
+    "category": "SportShoes",
+    "subcategory": "Giày chạy bộ",
+    "images": [
+      "/images/shoe-running.jpg"
+    ],
+    "sizes": [
+      "40",
+      "41",
+      "42",
+      "43"
+    ],
+    "colors": [
+      {
+        "name": "Royal Red Grey",
+        "hex": "#be123c"
+      },
+      {
+        "name": "Triple Black",
+        "hex": "#18181b"
+      }
+    ],
+    "rating": 4.7,
+    "reviewsCount": 94,
+    "featured": false,
+    "trending": true,
+    "inStock": true
+  },
+  {
+    "id": "nike-dri-fit-legend-tee",
+    "name": "Nike Dri-FIT Legend Training Tee",
+    "description": "Áo thun tập luyện huyền thoại tích hợp công nghệ thấm hút mồ hôi Dri-FIT độc quyền của Nike. Kiểu dáng thoải mái, vải mềm mại chống bám mùi tốt.",
+    "price": 650000,
+    "category": "Clothing",
+    "subcategory": "Áo tập luyện",
+    "images": [
+      "/images/tee.jpg"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      {
+        "name": "Space Grey",
+        "hex": "#71717a"
+      },
+      {
+        "name": "Royal Blue",
+        "hex": "#1d4ed8"
+      }
+    ],
+    "rating": 4.5,
+    "reviewsCount": 220,
+    "featured": false,
+    "trending": true,
+    "inStock": true
+  },
+  {
+    "id": "nike-brasilia-duffel-bag",
+    "name": "Nike Brasilia 9.5 Training Duffel",
+    "description": "Túi trống thể thao Nike Brasilia cỡ trung với ngăn đựng giày riêng biệt và nhiều ngăn phụ tiện lợi. Chất liệu chống thấm nước đáy túi bền bỉ.",
+    "price": 950000,
+    "originalPrice": 1100000,
+    "category": "Clothing",
+    "subcategory": "Phụ kiện tập luyện",
+    "images": [
+      "/images/bag.jpg"
+    ],
+    "sizes": [
+      "OS"
+    ],
+    "colors": [
+      {
+        "name": "Deep Navy Black",
+        "hex": "#0f172a"
+      }
+    ],
+    "rating": 4.8,
+    "reviewsCount": 104,
+    "featured": false,
+    "trending": false,
+    "inStock": true
+  },
+  {
+    "id": "nike-court-legacy-lifestyle",
+    "name": "Nike Court Legacy Classic",
+    "description": "Dòng giày thời trang mang đậm phong cách tennis cổ điển. Thiết kế tối giản tinh tế bằng chất liệu da lộn bền bỉ, dễ kết hợp với mọi trang phục hàng ngày.",
+    "price": 1990000,
+    "category": "Sneaker",
+    "subcategory": "Giày lifestyle",
+    "images": [
+      "/images/shoe-sneaker.jpg"
+    ],
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43"
+    ],
+    "colors": [
+      {
+        "name": "Retro White Brown",
+        "hex": "#f5f5f4"
+      },
+      {
+        "name": "Classic Black",
+        "hex": "#09090b"
+      }
+    ],
+    "rating": 4.6,
+    "reviewsCount": 145,
+    "featured": false,
+    "trending": false,
+    "inStock": true
+  },
+  {
+    "id": "nike-dunk-low-retro",
+    "name": "Nike Dunk Low Retro Streetwear",
+    "description": "Dòng giày thể thao thời trang đường phố mang tính biểu tượng của Nike. Phối màu Panda retro, chất da cao cấp tôn dáng, khẳng định cá tính streetwear.",
+    "price": 2900000,
+    "originalPrice": 3290000,
+    "category": "Sneaker",
+    "subcategory": "Giày lifestyle",
+    "images": [
+      "/images/shoe-sneaker.jpg"
+    ],
+    "sizes": [
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      {
+        "name": "Panda White Black",
+        "hex": "#09090b"
+      }
+    ],
+    "rating": 4.9,
+    "reviewsCount": 520,
+    "featured": true,
+    "trending": true,
+    "inStock": true
+  },
+  {
+    "id": "nike-air-zoom-structure",
+    "name": "Nike Air Zoom Structure 25",
+    "description": "Dòng giày chạy hỗ trợ kiểm soát lật trong với đệm Zoom Air đàn hồi cực tốt. Thiết kế gót chân vát tăng khả năng thăng bằng trên mọi bề mặt đường chạy.",
+    "price": 3400000,
+    "category": "SportShoes",
+    "subcategory": "Giày chạy bộ",
+    "images": [
+      "/images/shoe-running.jpg"
+    ],
+    "sizes": [
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      {
+        "name": "Vibrant Volt Grey",
+        "hex": "#84cc16"
+      }
+    ],
+    "rating": 4.7,
+    "reviewsCount": 88,
+    "featured": false,
+    "trending": false,
+    "inStock": true
+  },
+  {
+    "id": "nike-pro-combat-leggings",
+    "name": "Nike Pro Dri-FIT Tight Leggings",
+    "description": "Quần bó cơ thể thao chuyên dụng dành cho nam. Chất vải co giãn 4 chiều hỗ trợ bó cơ, giảm mệt mỏi cơ bắp trong các bài tập tạ và chạy bộ cường độ cao.",
+    "price": 950000,
+    "category": "Clothing",
+    "subcategory": "Quần bó cơ",
+    "images": [
+      "/images/hoodie.jpg"
+    ],
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "colors": [
+      {
+        "name": "Stealth Black",
+        "hex": "#18181b"
+      }
+    ],
+    "rating": 4.8,
+    "reviewsCount": 167,
+    "featured": false,
+    "trending": true,
+    "inStock": true
+  }
+]

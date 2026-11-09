@@ -1,0 +1,11 @@
+﻿No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\database\export-demo.php
+No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\database\init.php
+No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\database\provision.php
+No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\public\router.php
+No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\src\auth.php
+No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\src\bootstrap.php
+No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\src\mail.php
+No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\src\orders.php
+No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\src\products.php
+No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\src\uploads.php
+No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\tests\database.php
