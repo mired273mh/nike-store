@@ -44,6 +44,7 @@ try { & $phpBin @phpArgs (Join-Path $projectRoot 'backend/database/provision.php
 finally { Remove-Item Env:MYSQL_ROOT_PASSWORD,Env:MYSQL_NEW_ROOT_PASSWORD -ErrorAction SilentlyContinue }
 & $phpBin @phpArgs (Join-Path $projectRoot 'backend/database/init.php')
 if ($LASTEXITCODE -ne 0) { throw 'Nhap du lieu that bai.' }
+& (Join-Path $PSScriptRoot 'install-mail.ps1')
 Push-Location $projectRoot
 try { npm.cmd install; if ($LASTEXITCODE -ne 0) { throw 'npm install that bai.' } } finally { Pop-Location }
 Write-Output 'San sang. Chay powershell -ExecutionPolicy Bypass -File scripts/start.ps1'

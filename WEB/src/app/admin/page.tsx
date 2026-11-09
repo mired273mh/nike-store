@@ -7,6 +7,9 @@ import { apiJson, jsonBody } from '@/lib/api';
 import type { Product, Order } from '@/lib/types';
 import Pagination from '@/components/ui/Pagination';
 import RichEditor from '@/components/admin/RichEditor';
+import StoreSettings from '@/components/admin/StoreSettings';
+import OrderEmailDialog from '@/components/admin/OrderEmailDialog';
+import MailStatus from '@/components/orders/MailStatus';
 const statusLabels: Record<Order['status'], string> = {
   Pending: 'Chờ xác nhận',
   Processing: 'Đang xử lý',
@@ -43,7 +46,7 @@ export default function AdminPage() {
   const { user, userReady } = useApp();
   const [products, setProducts] = useState<Product[]>([]),
     [orders, setOrders] = useState<Order[]>([]);
-  const [tab, setTab] = useState<'products' | 'orders'>('orders'),
+  const [tab, setTab] = useState<'products' | 'orders' | 'settings'>('orders'),
     [query, setQuery] = useState(''),
     [filter, setFilter] = useState('All'),
     [page, setPage] = useState(1);
@@ -57,6 +60,7 @@ export default function AdminPage() {
   const [sizesText, setSizesText] = useState(''),
     [colorsText, setColorsText] = useState(''),
     [imagesText, setImagesText] = useState('');
+  const [emailOrder, setEmailOrder] = useState<Order | null>(null);
   useEffect(() => {
     let active = true;
     if (user?.role === 'admin')
@@ -240,7 +244,7 @@ export default function AdminPage() {
           </div>
         ))}
       </div>
-      <div className="flex border-b mb-5">
+      <div className="flex flex-wrap border-b mb-5">
         <button
           onClick={() => {
             setTab('orders');
@@ -263,6 +267,12 @@ export default function AdminPage() {
         >
           Sản phẩm
         </button>
+        <button
+          onClick={() => setTab('settings')}
+          className={`px-5 py-3 font-bold text-sm ${tab === 'settings' ? 'border-b-2 border-brand-red text-brand-red' : ''}`}
+        >
+          Cấu hình QR & Email
+        </button>
       </div>
       {error && (
         <p role="alert" className="bg-red-50 text-red-700 p-3 mb-4 text-sm">
@@ -274,215 +284,243 @@ export default function AdminPage() {
           {message}
         </p>
       )}
-      <div className="flex flex-wrap gap-3 mb-5">
-        <input
-          aria-label="Tìm trong trang quản trị"
-          placeholder="Tìm tên, email hoặc mã…"
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setPage(1);
-          }}
-          className="border p-2 min-w-0 flex-1 text-sm"
-        />
-        {tab === 'products' ? (
-          <button
-            className="bg-foreground text-background px-4 py-2 text-sm font-bold"
-            onClick={() => openEditor(null)}
-          >
-            Thêm sản phẩm
-          </button>
-        ) : (
-          <select
-            aria-label="Lọc đơn quản trị"
-            value={filter}
-            onChange={(e) => {
-              setFilter(e.target.value);
-              setPage(1);
-            }}
-            className="border p-2 text-sm"
-          >
-            <option value="All">Tất cả trạng thái</option>
-            {Object.entries(statusLabels).map(([k, v]) => (
-              <option key={k} value={k}>
-                {v}
-              </option>
-            ))}
-          </select>
-        )}
-      </div>
-      {!loaded ? (
-        <p>Đang tải dữ liệu…</p>
-      ) : tab === 'products' ? (
-        <>
-          <div className="flex flex-wrap gap-2 items-center p-3 bg-muted mb-4 text-xs">
-            <span>Đã chọn {selected.length}</span>
-            <button
-              disabled={busy || !selected.length}
-              className="border bg-background p-2 disabled:opacity-40"
-              onClick={() => batch('PUT', true)}
-            >
-              Hiện sản phẩm
-            </button>
-            <button
-              disabled={busy || !selected.length}
-              className="border bg-background p-2 disabled:opacity-40"
-              onClick={() => batch('PUT', false)}
-            >
-              Ẩn sản phẩm
-            </button>
-            <button
-              disabled={busy || !selected.length}
-              className="border bg-background p-2 text-red-700 disabled:opacity-40"
-              onClick={() => batch('DELETE')}
-            >
-              Xóa đã chọn
-            </button>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredProducts.slice((current - 1) * 6, current * 6).map((p) => (
-              <article key={p.id} className="border p-4 min-w-0">
-                <div className="flex justify-between gap-3">
-                  <Image
-                    src={p.images[0]}
-                    alt={p.name}
-                    width={80}
-                    height={90}
-                    className="w-20 h-24 object-cover bg-muted"
-                  />
-                  <label className="text-xs flex gap-2 items-start">
-                    <input
-                      aria-label={`Chọn ${p.name}`}
-                      type="checkbox"
-                      checked={selected.includes(p.id)}
-                      onChange={(e) =>
-                        setSelected((prev) =>
-                          e.target.checked ? [...prev, p.id] : prev.filter((v) => v !== p.id),
-                        )
-                      }
-                    />
-                    Chọn
-                  </label>
-                </div>
-                <h2 className="font-bold mt-3 text-sm">{p.name}</h2>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {p.category} · {p.stockQuantity} sản phẩm · {p.inStock ? 'Đang bán' : 'Đang ẩn'}
-                </p>
-                <p className="font-black my-3">{p.price.toLocaleString('vi-VN')}đ</p>
-                <div className="flex gap-2">
-                  <button
-                    className="border px-3 py-2 text-xs font-bold"
-                    onClick={() => openEditor(p)}
-                    aria-label={`Sửa ${p.name}`}
-                  >
-                    Sửa
-                  </button>
-                  <button
-                    disabled={busy}
-                    className="border px-3 py-2 text-xs"
-                    onClick={() =>
-                      action(async () => {
-                        await apiJson(
-                          `/api/products/${p.id}`,
-                          jsonBody('PUT', { inStock: !p.inStock, version: p.version }),
-                        );
-                        await reload();
-                      }, 'Đã cập nhật trạng thái.')
-                    }
-                  >
-                    {p.inStock ? 'Ẩn' : 'Hiện'}
-                  </button>
-                  <button
-                    disabled={busy}
-                    className="border px-3 py-2 text-xs text-red-700"
-                    aria-label={`Xóa ${p.name}`}
-                    onClick={() => {
-                      if (window.confirm(`Xóa sản phẩm ${p.name}?`))
-                        action(async () => {
-                          await apiJson(`/api/products/${p.id}`, { method: 'DELETE' });
-                          await reload();
-                        }, 'Đã xóa sản phẩm.');
-                    }}
-                  >
-                    Xóa
-                  </button>
-                </div>
-              </article>
-            ))}
-          </div>
-        </>
+      {tab === 'settings' ? (
+        <StoreSettings />
       ) : (
-        <div className="space-y-4">
-          {filteredOrders.slice((current - 1) * 6, current * 6).map((o) => (
-            <article key={o.id} className="border p-4 sm:p-6">
-              <div className="flex flex-wrap justify-between gap-2">
-                <h2 className="font-mono text-sm font-bold break-all">{o.id}</h2>
-                <span className="font-bold text-xs bg-muted px-2 py-1">
-                  {statusLabels[o.status]}
-                </span>
-              </div>
-              <p className="text-sm mt-3 break-words">
-                {o.customerDetails.name} · {o.customerDetails.phone} · {o.customerDetails.email}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1 break-words">
-                {o.customerDetails.address}
-              </p>
-              <ul className="text-sm my-4 space-y-1">
-                {o.items.map((i, index) => (
-                  <li key={index}>
-                    {i.name} · {i.size} · {i.color} · x{i.quantity}
-                  </li>
+        <>
+          <div className="flex flex-wrap gap-3 mb-5">
+            <input
+              aria-label="Tìm trong trang quản trị"
+              placeholder="Tìm tên, email hoặc mã…"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setPage(1);
+              }}
+              className="border p-2 min-w-0 flex-1 text-sm"
+            />
+            {tab === 'products' ? (
+              <button
+                className="bg-foreground text-background px-4 py-2 text-sm font-bold"
+                onClick={() => openEditor(null)}
+              >
+                Thêm sản phẩm
+              </button>
+            ) : (
+              <select
+                aria-label="Lọc đơn quản trị"
+                value={filter}
+                onChange={(e) => {
+                  setFilter(e.target.value);
+                  setPage(1);
+                }}
+                className="border p-2 text-sm"
+              >
+                <option value="All">Tất cả trạng thái</option>
+                {Object.entries(statusLabels).map(([k, v]) => (
+                  <option key={k} value={k}>
+                    {v}
+                  </option>
                 ))}
-              </ul>
-              <p className="font-black">
-                {o.total.toLocaleString('vi-VN')}đ ·{' '}
-                <span className="text-sm font-semibold">
-                  {o.paymentMethod} /{' '}
-                  {o.paymentStatus === 'Paid' ? 'Đã thanh toán' : 'Chưa thanh toán'}
-                </span>
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">
-                {new Date(o.createdAt).toLocaleString('vi-VN')}
-              </p>
-              {o.reportedNotReceived && (
-                <p className="text-sm text-red-700 mt-3">
-                  Khách báo chưa nhận được hàng. Cần liên hệ kiểm tra.
-                </p>
-              )}
-              {o.userConfirmedReceived && (
-                <p className="text-xs text-green-700 mt-3">Khách đã xác nhận nhận hàng.</p>
-              )}
-              <div className="flex flex-wrap gap-2 mt-4">
-                {transitions[o.status]
-                  .filter((s) => !(s === 'Cancelled' && o.paymentStatus === 'Paid'))
-                  .map((s) => (
+              </select>
+            )}
+          </div>
+          {!loaded ? (
+            <p>Đang tải dữ liệu…</p>
+          ) : tab === 'products' ? (
+            <>
+              <div className="flex flex-wrap gap-2 items-center p-3 bg-muted mb-4 text-xs">
+                <span>Đã chọn {selected.length}</span>
+                <button
+                  disabled={busy || !selected.length}
+                  className="border bg-background p-2 disabled:opacity-40"
+                  onClick={() => batch('PUT', true)}
+                >
+                  Hiện sản phẩm
+                </button>
+                <button
+                  disabled={busy || !selected.length}
+                  className="border bg-background p-2 disabled:opacity-40"
+                  onClick={() => batch('PUT', false)}
+                >
+                  Ẩn sản phẩm
+                </button>
+                <button
+                  disabled={busy || !selected.length}
+                  className="border bg-background p-2 text-red-700 disabled:opacity-40"
+                  onClick={() => batch('DELETE')}
+                >
+                  Xóa đã chọn
+                </button>
+              </div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filteredProducts.slice((current - 1) * 6, current * 6).map((p) => (
+                  <article key={p.id} className="border p-4 min-w-0">
+                    <div className="flex justify-between gap-3">
+                      <Image
+                        src={p.images[0]}
+                        alt={p.name}
+                        width={80}
+                        height={90}
+                        className="w-20 h-24 object-cover bg-muted"
+                      />
+                      <label className="text-xs flex gap-2 items-start">
+                        <input
+                          aria-label={`Chọn ${p.name}`}
+                          type="checkbox"
+                          checked={selected.includes(p.id)}
+                          onChange={(e) =>
+                            setSelected((prev) =>
+                              e.target.checked ? [...prev, p.id] : prev.filter((v) => v !== p.id),
+                            )
+                          }
+                        />
+                        Chọn
+                      </label>
+                    </div>
+                    <h2 className="font-bold mt-3 text-sm">{p.name}</h2>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {p.category} · {p.stockQuantity} sản phẩm ·{' '}
+                      {p.inStock ? 'Đang bán' : 'Đang ẩn'}
+                    </p>
+                    <p className="font-black my-3">{p.price.toLocaleString('vi-VN')}đ</p>
+                    <div className="flex gap-2">
+                      <button
+                        className="border px-3 py-2 text-xs font-bold"
+                        onClick={() => openEditor(p)}
+                        aria-label={`Sửa ${p.name}`}
+                      >
+                        Sửa
+                      </button>
+                      <button
+                        disabled={busy}
+                        className="border px-3 py-2 text-xs"
+                        onClick={() =>
+                          action(async () => {
+                            await apiJson(
+                              `/api/products/${p.id}`,
+                              jsonBody('PUT', { inStock: !p.inStock, version: p.version }),
+                            );
+                            await reload();
+                          }, 'Đã cập nhật trạng thái.')
+                        }
+                      >
+                        {p.inStock ? 'Ẩn' : 'Hiện'}
+                      </button>
+                      <button
+                        disabled={busy}
+                        className="border px-3 py-2 text-xs text-red-700"
+                        aria-label={`Xóa ${p.name}`}
+                        onClick={() => {
+                          if (window.confirm(`Xóa sản phẩm ${p.name}?`))
+                            action(async () => {
+                              await apiJson(`/api/products/${p.id}`, { method: 'DELETE' });
+                              await reload();
+                            }, 'Đã xóa sản phẩm.');
+                        }}
+                      >
+                        Xóa
+                      </button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="space-y-4">
+              {filteredOrders.slice((current - 1) * 6, current * 6).map((o) => (
+                <article key={o.id} className="border p-4 sm:p-6">
+                  <div className="flex flex-wrap justify-between gap-2">
+                    <h2 className="font-mono text-sm font-bold break-all">{o.id}</h2>
+                    <span className="font-bold text-xs bg-muted px-2 py-1">
+                      {statusLabels[o.status]}
+                    </span>
+                  </div>
+                  <p className="text-sm mt-3 break-words">
+                    {o.customerDetails.name} · {o.customerDetails.phone} · {o.customerDetails.email}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1 break-words">
+                    {o.customerDetails.address}
+                  </p>
+                  <ul className="text-sm my-4 space-y-1">
+                    {o.items.map((i, index) => (
+                      <li key={index}>
+                        {i.name} · {i.size} · {i.color} · x{i.quantity}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="font-black">
+                    {o.total.toLocaleString('vi-VN')}đ ·{' '}
+                    <span className="text-sm font-semibold">
+                      {o.paymentMethod} /{' '}
+                      {o.paymentStatus === 'Paid' ? 'Đã thanh toán' : 'Chưa thanh toán'}
+                    </span>
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {new Date(o.createdAt).toLocaleString('vi-VN')}
+                  </p>
+                  {o.reportedNotReceived && (
+                    <p className="text-sm text-red-700 mt-3">
+                      Khách báo chưa nhận được hàng. Cần liên hệ kiểm tra.
+                    </p>
+                  )}
+                  {o.userConfirmedReceived && (
+                    <p className="text-xs text-green-700 mt-3">Khách đã xác nhận nhận hàng.</p>
+                  )}
+                  <MailStatus notification={o.lastNotification} />
+                  <div className="flex flex-wrap gap-2 mt-4">
                     <button
-                      key={s}
                       disabled={busy}
                       className="border p-2 text-xs font-bold disabled:opacity-40"
-                      onClick={() => updateOrder(o, { status: s })}
+                      onClick={() => setEmailOrder(o)}
                     >
-                      {statusLabels[s]}
+                      Xem / gửi email
                     </button>
-                  ))}
-                {o.paymentStatus === 'Unpaid' &&
-                  o.status !== 'Cancelled' &&
-                  (o.paymentMethod === 'BANK' || o.status === 'Delivered') && (
-                    <button
-                      disabled={busy}
-                      className="bg-foreground text-background p-2 text-xs font-bold disabled:opacity-40"
-                      onClick={() => updateOrder(o, { paymentStatus: 'Paid' })}
-                    >
-                      Xác nhận đã thu tiền
-                    </button>
-                  )}
-              </div>
-            </article>
-          ))}
-        </div>
+                    {transitions[o.status]
+                      .filter((s) => !(s === 'Cancelled' && o.paymentStatus === 'Paid'))
+                      .map((s) => (
+                        <button
+                          key={s}
+                          disabled={busy}
+                          className="border p-2 text-xs font-bold disabled:opacity-40"
+                          onClick={() => updateOrder(o, { status: s })}
+                        >
+                          {statusLabels[s]}
+                        </button>
+                      ))}
+                    {o.paymentStatus === 'Unpaid' &&
+                      o.status !== 'Cancelled' &&
+                      (o.paymentMethod === 'BANK' || o.status === 'Delivered') && (
+                        <button
+                          disabled={busy}
+                          className="bg-foreground text-background p-2 text-xs font-bold disabled:opacity-40"
+                          onClick={() => updateOrder(o, { paymentStatus: 'Paid' })}
+                        >
+                          Xác nhận đã thu tiền
+                        </button>
+                      )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+          {loaded && total === 0 && <p className="py-10 text-center">Không có dữ liệu phù hợp.</p>}
+          <Pagination page={current} pages={pages} onPage={setPage} />
+        </>
       )}
-      {loaded && total === 0 && <p className="py-10 text-center">Không có dữ liệu phù hợp.</p>}
-      <Pagination page={current} pages={pages} onPage={setPage} />
+      {emailOrder && (
+        <OrderEmailDialog
+          order={emailOrder}
+          onClose={() => setEmailOrder(null)}
+          onDelivery={(notification) =>
+            setOrders((prev) =>
+              prev.map((o) =>
+                o.id === emailOrder.id ? { ...o, lastNotification: notification } : o,
+              ),
+            )
+          }
+        />
+      )}
       {editing !== undefined && (
         <div className="fixed inset-0 bg-black/50 z-50 overflow-y-auto p-3 sm:p-8">
           <section

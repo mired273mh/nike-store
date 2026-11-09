@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/../src/bootstrap.php';
 require ROOT . '/src/auth.php';
+require ROOT . '/src/settings.php';
 require ROOT . '/src/mail.php';
 require ROOT . '/src/products.php';
 require ROOT . '/src/orders.php';
@@ -29,19 +30,51 @@ try {
     }
     if ($path === '/api/health' && $method === 'GET') {
         query('SELECT 1');
+        query('SELECT name FROM app_settings LIMIT 0');
+        query('SELECT id FROM order_notifications LIMIT 0');
+        query('SELECT payment_instructions FROM orders LIMIT 0');
         respond(['status' => 'ok', 'backend' => 'PHP', 'database' => 'MySQL']);
     }
     if ($path === '/api/settings' && $method === 'GET') {
+        respond(['bank' => bank_config()]);
+    }
+    if ($path === '/api/admin/settings') {
+        settings_route($method);
+    }
+    if ($path === '/api/admin/mail-test' && $method === 'POST') {
+        admin_user();
+        mutation_guard();
+        rate_limit('mail-test', 10, 3600);
+        $recipient = email_field(body());
+        try {
+            $status = send_mail(
+                $recipient,
+                'Nike Store — kiểm tra email',
+                'Đây là email kiểm tra cấu hình gửi thư của Nike Store.',
+            );
+        } catch (Throwable $e) {
+            error_log('SMTP test failed: ' . $e->getMessage());
+            fail(
+                502,
+                'Không gửi được email. Kiểm tra tài khoản, mật khẩu ứng dụng và cấu hình SMTP.',
+            );
+        }
         respond([
-            'bank' =>
-                env('BANK_ACCOUNT') !== ''
-                    ? [
-                        'name' => env('BANK_NAME'),
-                        'account' => env('BANK_ACCOUNT'),
-                        'holder' => env('BANK_HOLDER'),
-                    ]
-                    : null,
+            'status' => $status,
+            'message' =>
+                $status === 'sent'
+                    ? 'Đã gửi email thử qua SMTP. Vui lòng kiểm tra hộp thư.'
+                    : 'Đã tạo thư mô phỏng. Cần bật SMTP và nhập mật khẩu ứng dụng để gửi tới hộp thư thật.',
         ]);
+    }
+    if (
+        preg_match(
+            '#^/api/orders/([a-zA-Z0-9-]+)/(payment|notifications|email-preview)$#D',
+            $path,
+            $m,
+        )
+    ) {
+        order_extras_route($m[1], $m[2], $method);
     }
     if (preg_match('#^/api/auth/([a-z-]+)$#D', $path, $m)) {
         auth_route($m[1], $method);

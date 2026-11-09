@@ -5,20 +5,21 @@ import Image from 'next/image';
 import { Trash2, Plus, Minus, ShoppingBag, CheckCircle } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import { apiJson, jsonBody } from '@/lib/api';
-import type { Order, Product } from '@/lib/types';
-type Bank = { name: string; account: string; holder: string };
+import type { Order, Product, BankSettings } from '@/lib/types';
+import PaymentQr from '@/components/orders/PaymentQr';
+import MailStatus from '@/components/orders/MailStatus';
 export default function CartPage() {
   const { cart, user, userReady, updateCartQuantity, removeFromCart, clearCart, replaceCart } =
     useApp();
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(''),
     [success, setSuccess] = useState<Order | null>(null);
-  const [bank, setBank] = useState<Bank | null>(null),
+  const [bank, setBank] = useState<BankSettings | null>(null),
     [method, setMethod] = useState<'COD' | 'BANK'>('COD');
   const [checked, setChecked] = useState('');
   const cartKey = JSON.stringify(cart.map((i) => [i.product.id, i.quantity, i.size, i.color.hex]));
   useEffect(() => {
-    apiJson<{ bank: Bank | null }>('/api/settings')
+    apiJson<{ bank: BankSettings | null }>('/api/settings')
       .then((data) => setBank(data.bank))
       .catch(() => {});
   }, []);
@@ -105,19 +106,8 @@ export default function CartPage() {
             ? 'Thanh toán khi nhận hàng.'
             : 'Đơn đang chờ cửa hàng xác nhận chuyển khoản.'}
         </p>
-        {success.paymentMethod === 'BANK' && bank && (
-          <div className="p-4 bg-muted text-left space-y-2 text-sm mb-6">
-            <p>
-              {bank.name} · {bank.holder}
-            </p>
-            <p className="font-bold">Số tài khoản: {bank.account}</p>
-            <p className="break-all">Nội dung: {success.id}</p>
-            <p>
-              Chỉ chuyển đúng tổng tiền trên đơn. Trạng thái thanh toán được cập nhật sau khi cửa
-              hàng kiểm tra.
-            </p>
-          </div>
-        )}
+        {success.paymentMethod === 'BANK' && <PaymentQr orderId={success.id} />}
+        <MailStatus notification={success.lastNotification} />
         <Link
           href="/orders"
           className="inline-block bg-foreground text-background px-6 py-3 font-bold"
@@ -297,10 +287,16 @@ export default function CartPage() {
                         checked={method === 'BANK'}
                         onChange={() => setMethod('BANK')}
                       />
-                      Chuyển khoản ngân hàng
+                      {bank.mode === 'demo' ? 'QR ngân hàng (demo)' : 'QR chuyển khoản (VietQR)'}
                     </label>
                   )}
                 </fieldset>
+                {method === 'BANK' && bank?.mode === 'demo' && (
+                  <p className="bg-amber-50 text-amber-900 p-3 text-xs">
+                    Thanh toán mô phỏng với Nike Demo Bank. Không chuyển tiền thật; mã QR sẽ xuất
+                    hiện sau khi đặt hàng.
+                  </p>
+                )}
                 <div className="border-t pt-4 space-y-2 text-sm">
                   <p className="flex justify-between">
                     <span>Tạm tính</span>
@@ -323,7 +319,7 @@ export default function CartPage() {
                     ? 'Đang đặt hàng…'
                     : method === 'COD'
                       ? 'Đặt hàng (COD)'
-                      : 'Đặt hàng chuyển khoản'}
+                      : 'Đặt hàng & xem QR'}
                 </button>
               </form>
             )}

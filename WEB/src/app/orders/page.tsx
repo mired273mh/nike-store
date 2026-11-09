@@ -6,6 +6,8 @@ import { useApp } from '@/context/AppContext';
 import { apiJson, jsonBody } from '@/lib/api';
 import type { Order } from '@/lib/types';
 import Pagination from '@/components/ui/Pagination';
+import PaymentQr from '@/components/orders/PaymentQr';
+import MailStatus from '@/components/orders/MailStatus';
 const labels: Record<Order['status'], string> = {
   Pending: 'Chờ xác nhận',
   Processing: 'Đang xử lý',
@@ -167,6 +169,10 @@ export default function OrdersPage() {
                     <p className="text-green-700">Bạn đã xác nhận nhận hàng.</p>
                   )}
                 </div>
+                <MailStatus notification={order.lastNotification} />
+                {order.paymentMethod === 'BANK' &&
+                  order.paymentStatus === 'Unpaid' &&
+                  order.status !== 'Cancelled' && <PaymentQr orderId={order.id} />}
                 <div className="flex flex-wrap gap-3 mt-4">
                   {order.status === 'Pending' && order.paymentStatus === 'Unpaid' && (
                     <button

@@ -5,9 +5,9 @@
 1. Nêu đề tài Website Nike Store; chỉ ra backend PHP + MySQL và frontend React/Next.js. Mở sơ đồ kiến trúc và ERD.
 2. Trang sản phẩm: tìm Pegasus, lọc danh mục/size/giá, đổi thứ tự giá và chuyển trang.
 3. Đăng ký tài khoản; chọn size/màu, thêm giỏ, đổi số lượng, tải lại để chứng minh giỏ được giữ.
-4. Đặt COD với thông tin mẫu; mở đơn hàng và trạng thái. Có thể demo hủy một đơn Pending để chứng minh hoàn tồn.
+4. Đặt QR ngân hàng demo với thông tin mẫu; xem QR, số tiền và thông báo không chuyển tiền thật; mở lại QR từ lịch sử đơn. Có thể đặt thêm COD hoặc hủy một đơn Pending để chứng minh hoàn tồn.
 5. Đăng xuất; đăng nhập Admin. Thêm sản phẩm, soạn mô tả có định dạng, upload 2 ảnh, sửa giá, ẩn/hiện và xóa sản phẩm vừa thêm.
-6. Admin cập nhật đơn Pending → Processing → Shipped → Delivered; xác nhận đã thu tiền; doanh thu đã thu cập nhật.
+6. Admin cập nhật đơn Pending → Processing → Shipped → Delivered; xác nhận đã thu tiền; doanh thu đã thu cập nhật. Bấm Xem / gửi email, nhập lời nhắn và xem trước mẫu. Mặc định lưu thư mô phỏng; chỉ bật SMTP với tài khoản riêng khi muốn gửi thật. Cấu hình QR & Email cho phép thay ngân hàng/SMTP sau này.
 7. Khách chỉ xem được đơn mình. Trình bày kết quả kiểm thử và một ví dụ API từ chối quyền sai/giá bị sửa.
 8. Trình bày đóng góp thực tế của thành viên và hạn chế/định hướng.
 

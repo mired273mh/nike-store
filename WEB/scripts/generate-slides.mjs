@@ -60,7 +60,7 @@ const slides = [
       'Tìm kiếm · lọc · sắp xếp',
       'Phân trang · chọn size/màu',
       'Giỏ hàng lưu trên trình duyệt',
-      'Đặt COD · lịch sử · hủy đúng điều kiện',
+      'COD / QR demo · lịch sử · hủy đúng điều kiện',
     ],
     notes: 'Demo một lần từ danh sách tới đơn hàng; không nhập dữ liệu cá nhân thật.',
   },
@@ -81,7 +81,7 @@ const slides = [
       'Pending → Processing → Shipped → Delivered.',
       'Hủy đơn chưa trả tiền theo đúng trạng thái và quyền.',
       'Khóa sản phẩm trong transaction, tính giá và trừ tồn tại server.',
-      'COD do Admin xác nhận đã thu; BANK cần kiểm tra giao dịch.',
+      'QR demo không chuyển tiền; Admin xem trước/gửi email cho khách.',
     ],
     notes:
       'Khách không được tự đánh dấu Paid. Hủy hợp lệ hoàn tồn đúng một lần, không tự hiện sản phẩm đã bị Admin ẩn.',
@@ -101,7 +101,7 @@ const slides = [
     title: 'Kiểm thử & kết quả',
     bullets: [
       `${passed}/${passed} ca tự động đạt; không có ca lỗi hoặc flaky.`,
-      'API: CRUD, xác thực, phân quyền, CSRF, upload và OTP.',
+      'API: CRUD, phân quyền, QR, email, SMTP thử nghiệm và OTP.',
       'Giao dịch: sửa giá, vượt tồn, hủy, trạng thái, mua đồng thời.',
       'Browser: mua hàng, Admin, logout, responsive 390 / 768 / 1440px.',
     ],
@@ -133,8 +133,8 @@ const slides = [
   {
     title: 'Demo & giới hạn phạm vi',
     bullets: [
-      'Demo local: sản phẩm → giỏ → COD → Admin → xác nhận thu tiền.',
-      'SMTP thật cần cấu hình riêng; local có hộp thư mô phỏng.',
+      'Demo local: sản phẩm → giỏ → QR demo → Admin → xem trước email.',
+      'Gmail thật cần mật khẩu ứng dụng; Admin có cấu hình và gửi thử.',
       'Không giả lập cổng VNPay / MoMo hoặc giao vận thật.',
       'Link deploy là tùy chọn; Docker được cung cấp, chưa kiểm thử daemon.',
     ],

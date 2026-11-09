@@ -5,9 +5,13 @@
 - TypeScript: đạt.
 - ESLint: 0 lỗi, 0 cảnh báo.
 - PHP syntax: đạt.
-- API: 67/67 ca đạt.
-- Browser: 15/15 ca đạt.
-- Tổng: **82/82**, không bỏ qua, không flaky; khoảng 56,3 giây.
+- API: 80/80 ca đạt.
+- Browser: 19/19 ca đạt.
+- Tổng Playwright: **99/99**, không bỏ qua, không flaky; khoảng 185,2 giây.
+- Launcher: **4/4** ca đạt, tách riêng khỏi Playwright.
+- QR demo: đúng tổng tiền server, phân quyền, snapshot ngân hàng và hiển thị lại trong lịch sử.
+- Email: xem trước, lời nhắn Admin, lịch sử gửi, mật khẩu mã hóa; PHPMailer gửi qua SMTP thử nghiệm local và ghi nhận lỗi không làm mất đơn.
+- Chưa gửi thư Gmail thật; cần mật khẩu ứng dụng mới nhập riêng ở Admin.
 - Kiểm thử ở database riêng `nike_store_test`; không thay dữ liệu chính.
 - Import demo SQL được kiểm tra thực: 14 sản phẩm, 2 tài khoản demo, không đơn cá nhân.
 - File `playwright-after.json` chứa kết quả từng ca.

@@ -20,6 +20,7 @@ try {
     $runtimeRoot = Join-Path $env:LOCALAPPDATA 'NikeStoreRuntime'
     $needsSetup = !(Test-Path -LiteralPath (Join-Path $runtimeRoot 'php/php.exe')) -or !(Test-Path -LiteralPath (Join-Path $runtimeRoot 'mysql-data/mysql')) -or !(Test-Path -LiteralPath (Join-Path $projectRoot 'node_modules/next/package.json')) -or !(Test-Path -LiteralPath (Join-Path $projectRoot 'backend/.env'))
     if ($needsSetup) { & (Join-Path $PSScriptRoot 'setup.ps1') }
+    if (!(Test-Path -LiteralPath (Join-Path $projectRoot 'backend/vendor/autoload.php'))) { & (Join-Path $PSScriptRoot 'install-mail.ps1') }
     & (Join-Path $PSScriptRoot 'start.ps1') -Port $Port -OpenBrowser:$OpenBrowser
 } finally {
     if ($ownsMutex) { $startupMutex.ReleaseMutex() }

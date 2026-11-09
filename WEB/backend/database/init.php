@@ -6,6 +6,17 @@ if (PHP_SAPI !== 'cli') {
     exit(1);
 }
 db()->exec(file_get_contents(__DIR__ . '/schema.sql'));
+if (!query("SHOW COLUMNS FROM orders LIKE 'payment_instructions'")->fetch()) {
+    db()->exec('ALTER TABLE orders ADD COLUMN payment_instructions JSON NULL AFTER payment_status');
+}
+if (
+    query("SHOW COLUMNS FROM order_notifications LIKE 'created_at'")->fetch()['Type'] !==
+    'datetime(6)'
+) {
+    db()->exec(
+        'ALTER TABLE order_notifications MODIFY created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)',
+    );
+}
 if (!query('SELECT name FROM app_metadata WHERE name=?', ['initial_seed'])->fetch()) {
     transaction(function () {
         $products = json_decode(

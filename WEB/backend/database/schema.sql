@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS orders (
  status ENUM('Pending','Processing','Shipped','Delivered','Cancelled') NOT NULL DEFAULT 'Pending',
  payment_method ENUM('COD','BANK') NOT NULL DEFAULT 'COD',
  payment_status ENUM('Unpaid','Paid') NOT NULL DEFAULT 'Unpaid',
+ payment_instructions JSON NULL,
  reported_not_received BOOLEAN NOT NULL DEFAULT FALSE,
  user_confirmed_received BOOLEAN NOT NULL DEFAULT FALSE,
  version INT UNSIGNED NOT NULL DEFAULT 1,
@@ -123,4 +124,25 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 CREATE TABLE IF NOT EXISTS app_metadata (
  name VARCHAR(80) PRIMARY KEY,
  value TEXT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS app_settings (
+ name VARCHAR(80) PRIMARY KEY,
+ value TEXT NOT NULL,
+ updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS order_notifications (
+ id CHAR(32) PRIMARY KEY,
+ order_id VARCHAR(64) NOT NULL,
+ recipient VARCHAR(254) NOT NULL,
+ subject VARCHAR(200) NOT NULL,
+ html MEDIUMTEXT NOT NULL,
+ message TEXT NOT NULL,
+ status ENUM('sent','preview','failed') NOT NULL,
+ transport ENUM('file','smtp') NOT NULL,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ sent_at DATETIME NULL,
+ FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+ INDEX (order_id,created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

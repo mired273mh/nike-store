@@ -25,6 +25,14 @@ Mọi phản hồi JSON UTF-8. Lỗi dạng `{ "message": "..." }`. Token chỉ 
 | GET | /api/orders | User xem đơn mình; Admin xem tất cả; bỏ qua userId URL |
 | POST | /api/orders | User tạo đơn; customerDetails, items (productId/quantity/size/color), paymentMethod COD/BANK; total tùy chọn phải khớp tính toán server |
 | PUT | /api/orders | orderId, version; status/paymentStatus/receipt/report theo quyền và điều kiện |
+| GET | /api/orders/:id/payment | Chủ đơn/Admin xem QR theo snapshot; chỉ BANK chưa Paid/chưa hủy; tiền do server tính |
+| GET | /api/orders/:id/email-preview | Admin xem HTML/text, người nhận; message tùy chọn được escape |
+| GET | /api/orders/:id/notifications | Chủ đơn/Admin xem lịch sử sent/preview/failed |
+| POST | /api/orders/:id/notifications | Admin gửi lại cho email khách trong đơn; message tùy chọn, CSRF/rate limit |
+| GET/PUT | /api/admin/settings | Admin xem/lưu ngân hàng và SMTP; chỉ trả passwordConfigured, không trả mật khẩu |
+| POST | /api/admin/mail-test | Admin gửi thư thử theo chế độ đã lưu; CSRF/rate limit |
 | POST | /api/newsletter | email; đăng ký lặp không tạo bản ghi trùng |
 
-Mã lỗi: 400 dữ liệu sai, 401 chưa đăng nhập, 403 không đủ quyền/CSRF/Origin, 404 không tồn tại, 405 method sai, 409 trùng email/xung đột phiên bản/tồn kho/trạng thái, 413 dữ liệu quá lớn, 415 content type sai, 429 quá số lần, 500 lỗi nội bộ không lộ stack ra client.
+Mã lỗi: 400 dữ liệu sai, 401 chưa đăng nhập, 403 không đủ quyền/CSRF/Origin, 404 không tồn tại, 405 method sai, 409 trùng email/xung đột phiên bản/tồn kho/trạng thái, 413 dữ liệu quá lớn, 415 content type sai, 429 quá số lần, 500 lỗi nội bộ không lộ stack ra client, 502 gửi SMTP thất bại.
+
+Đặt/cập nhật đơn trả `lastNotification`; lỗi gửi thư không hủy transaction đơn. `sent` nghĩa SMTP đã chấp nhận, `preview` chỉ lưu mô phỏng local, `failed` là gửi lỗi. QR demo không chứa lệnh chuyển tiền ngân hàng.

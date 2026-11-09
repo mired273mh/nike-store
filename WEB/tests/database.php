@@ -28,6 +28,12 @@ if ($action === 'reset' || $action === 'reseed' || $action === 'import-demo') {
     query('UPDATE password_resets SET expires_at=DATE_SUB(UTC_TIMESTAMP(),INTERVAL 1 SECOND)');
 } elseif ($action === 'clear-limits') {
     query('DELETE FROM rate_limits');
+} elseif ($action === 'settings-inspect') {
+    echo json_encode([
+        'encryptedPassword' => query('SELECT value FROM app_settings WHERE name=?', [
+            'smtp_password',
+        ])->fetchColumn(),
+    ]);
 } else {
     throw new RuntimeException('Unknown test helper action.');
 }

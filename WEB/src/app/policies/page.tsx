@@ -26,9 +26,9 @@ export default function PoliciesPage() {
       <section id="payment">
         <h2 className="text-xl font-bold mb-3">Thanh toán</h2>
         <p>
-          COD là thanh toán khi nhận hàng. Chuyển khoản chỉ xuất hiện khi cửa hàng đã cấu hình thông
-          tin ngân hàng. Quản trị viên kiểm tra tiền nhận được trước khi xác nhận thanh toán;
-          website không tự xác nhận từ thao tác của khách hàng.
+          COD là thanh toán khi nhận hàng. QR demo dùng ngân hàng và tài khoản ảo, không chuyển tiền
+          thật. Khi cửa hàng cấu hình ngân hàng thật, mã VietQR hiển thị số tiền và nội dung đơn
+          hàng. Quản trị viên kiểm tra giao dịch trước khi xác nhận thanh toán.
         </p>
       </section>
       <section id="privacy">

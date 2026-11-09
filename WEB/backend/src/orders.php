@@ -27,6 +27,10 @@ function order_row(array $o): array
         'status' => $o['status'],
         'paymentMethod' => $o['payment_method'],
         'paymentStatus' => $o['payment_status'],
+        'paymentInstructions' => isset($o['payment_instructions'])
+            ? json_decode($o['payment_instructions'], true)
+            : null,
+        'lastNotification' => last_order_notification($o['id']),
         'reportedNotReceived' => (bool) $o['reported_not_received'],
         'userConfirmedReceived' => (bool) $o['user_confirmed_received'],
         'version' => (int) $o['version'],
@@ -137,9 +141,29 @@ function orders_route(string $method): never
                 fail(400, 'Giá hoặc tổng đơn đã thay đổi. Vui lòng cập nhật giỏ hàng.');
             }
             $id = 'ord-' . bin2hex(random_bytes(12));
+            $instructions = $methodPay === 'BANK' ? bank_config() : null;
+            if (
+                $instructions &&
+                $instructions['mode'] === 'real' &&
+                (!preg_match('/^[0-9]{6}$/D', $instructions['bin']) ||
+                    !preg_match('/^[0-9]{6,25}$/D', $instructions['account']))
+            ) {
+                fail(409, 'Cửa hàng chưa cấu hình đầy đủ QR ngân hàng.');
+            }
             query(
-                'INSERT INTO orders(id,user_id,customer_name,customer_email,customer_address,customer_phone,total,shipping_fee,payment_method) VALUES(?,?,?,?,?,?,?,?,?)',
-                [$id, $u['id'], $name, $email, $address, $phone, $total, $shipping, $methodPay],
+                'INSERT INTO orders(id,user_id,customer_name,customer_email,customer_address,customer_phone,total,shipping_fee,payment_method,payment_instructions) VALUES(?,?,?,?,?,?,?,?,?,?)',
+                [
+                    $id,
+                    $u['id'],
+                    $name,
+                    $email,
+                    $address,
+                    $phone,
+                    $total,
+                    $shipping,
+                    $methodPay,
+                    $instructions ? json_encode($instructions, JSON_UNESCAPED_UNICODE) : null,
+                ],
             );
             foreach ($normalized as $i) {
                 query(
@@ -165,7 +189,7 @@ function orders_route(string $method): never
             audit('order.create', $id, $u['id']);
             return order_row(query('SELECT * FROM orders WHERE id=?', [$id])->fetch());
         });
-        order_mail($order);
+        $order['lastNotification'] = order_mail($order);
         respond(['order' => $order, 'message' => 'Đặt hàng thành công.'], 201);
     }
     if ($method === 'PUT') {
@@ -298,11 +322,11 @@ function orders_route(string $method): never
             audit('order.update', $id, $u['id']);
             return order_row(query('SELECT * FROM orders WHERE id=?', [$id])->fetch());
         });
-        order_mail($order);
+        $order['lastNotification'] = order_mail($order);
         if ($order['reportedNotReceived']) {
             try {
                 send_mail(
-                    env('ADMIN_EMAIL', 'admin@example.com'),
+                    mail_config()['adminEmail'],
                     'Khiếu nại chưa nhận hàng: ' . $order['id'],
                     'Vui lòng kiểm tra đơn hàng trong trang quản trị.',
                 );

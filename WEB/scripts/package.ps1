@@ -7,7 +7,7 @@ foreach ($dir in @('src','public','docs','scripts','tests')) { Copy-Item -Litera
 $backendStage = Join-Path $stage 'backend'
 New-Item -ItemType Directory -Path $backendStage | Out-Null
 foreach ($dir in @('src','public','database')) { Copy-Item -LiteralPath (Join-Path $projectRoot "backend/$dir") -Destination $backendStage -Recurse }
-foreach ($file in @('.env.example','php.ini','composer.json','Dockerfile')) { Copy-Item -LiteralPath (Join-Path $projectRoot "backend/$file") -Destination $backendStage }
+foreach ($file in @('.env.example','php.ini','composer.json','composer.lock','Dockerfile')) { Copy-Item -LiteralPath (Join-Path $projectRoot "backend/$file") -Destination $backendStage }
 New-Item -ItemType Directory -Path (Join-Path $backendStage 'storage') | Out-Null
 Copy-Item -LiteralPath (Join-Path $projectRoot 'backend/storage/.gitkeep') -Destination (Join-Path $backendStage 'storage')
 foreach ($file in @('package.json','package-lock.json','next.config.ts','next-env.d.ts','tsconfig.json','eslint.config.mjs','postcss.config.mjs','playwright.config.ts','README.md','REVIEW.md','.env.example','.gitignore','.prettierrc.json','.prettierignore','.dockerignore','Dockerfile','compose.yaml','AGENTS.md','CHAY-WEB.cmd','fiveserver.config.js')) {

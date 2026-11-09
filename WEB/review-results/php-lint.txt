@@ -7,5 +7,6 @@ No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\src\bootst
 No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\src\mail.php
 No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\src\orders.php
 No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\src\products.php
+No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\src\settings.php
 No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\backend\src\uploads.php
 No syntax errors detected in C:\Users\mired\Downloads\WEB\WEB\tests\database.php

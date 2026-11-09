@@ -55,13 +55,17 @@ Có `compose.yaml` cho MySQL + PHP + frontend. Cấu hình biến môi trường
 - Khách: tìm/lọc/sắp xếp, phân trang 9 sản phẩm/trang, xem nhiều ảnh, chọn size/màu, giỏ hàng lưu trên thiết bị, đăng ký/đăng nhập/đăng xuất, khôi phục mật khẩu bằng mã một lần, đặt COD và xem/hủy đơn hợp lệ.
 - Admin: thêm/xem/sửa/xóa sản phẩm, giá/size/màu/tồn kho, editor định dạng, upload nhiều JPG/PNG/WebP, ẩn/hiện/xóa hàng loạt, quản lý trạng thái đơn, xác nhận đã thu tiền, doanh thu chỉ cộng đơn Paid chưa hủy.
 - Đơn được tính giá tại PHP, khóa tồn kho trong transaction, không cho sửa userId/tổng tiền để vượt kiểm tra. Phiên server, cookie HttpOnly/SameSite, CSRF, kiểm tra Origin và phân quyền ở server.
-- Chuyển khoản chỉ hiện khi `BANK_NAME`, `BANK_ACCOUNT`, `BANK_HOLDER` được cấu hình. Không có luồng tự nhận đã thanh toán hoặc cổng VNPay/MoMo giả.
+- Thanh toán QR mặc định dùng **Nike Demo Bank**, số tài khoản `DEMO-000123456`: QR chứa thông tin đơn mô phỏng, **không chuyển tiền thật**. QR hiện sau đặt hàng và trong lịch sử đơn BANK chưa trả tiền/chưa hủy. Khi có ngân hàng thật, Admin cấu hình BIN/tài khoản để tạo VietQR; thông tin ngân hàng được chụp lại theo từng đơn. Chỉ Admin xác nhận đã thu sau khi kiểm tra giao dịch.
 
 ## Email và khôi phục mật khẩu
 
 Mặc định local dùng `MAIL_TRANSPORT=file`: thư nằm trong `backend/storage/outbox/*.json`, chỉ người quản lý máy đọc được; không phục vụ qua web. Mã xác nhận ngẫu nhiên, hạn 10 phút, chỉ dùng một lần và khóa sau 5 lần sai.
 
-Để gửi thư thật, chạy `composer install` trong `backend/`, đặt `MAIL_TRANSPORT=smtp` cùng các trường SMTP trong `backend/.env`. Không đưa mật khẩu/email credential thật vào README hoặc source. Các credential email cũ từng được ghi trong tài liệu cần chủ tài khoản thu hồi ở nhà cung cấp.
+Admin vào **Cấu hình QR & Email** để nhập email gửi, tài khoản SMTP và **mật khẩu ứng dụng mới của Gmail**. Chọn gửi thật qua SMTP, lưu rồi gửi email thử; Gmail dùng `smtp.gmail.com`, cổng `587`, TLS. Không nhập mật khẩu email vào chat hoặc source. Mật khẩu được mã hóa trong database; API không trả lại mật khẩu. Sao lưu riêng `backend/storage/mail.key` cùng database nếu cần chuyển cấu hình sang máy khác, không đưa khóa vào Git. Mật khẩu ứng dụng cũ từng xuất hiện trong tài liệu cần chủ tài khoản thu hồi tại Google.
+
+Email tự tạo khi đặt hàng/cập nhật đơn. Trong danh sách đơn, Admin bấm **Xem / gửi email** để xem trước mẫu, thêm lời nhắn, gửi lại và xem lịch sử. Giao diện phân biệt gửi qua SMTP thành công, thư mô phỏng và gửi thất bại; lỗi SMTP không làm mất đơn đã đặt. SMTP chấp nhận thư không bảo đảm thư đã vào hộp thư đến; cần kiểm tra cả thư rác của người nhận.
+
+Setup Windows tự cài PHPMailer theo Composer lock. Với máy đã setup trước đây, chạy `powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-mail.ps1` nếu thiếu thư viện. Linux: chạy `composer install --working-dir=backend --no-dev`.
 
 ## Kiểm tra và kiểm thử
 

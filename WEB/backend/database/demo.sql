@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS orders (
  status ENUM('Pending','Processing','Shipped','Delivered','Cancelled') NOT NULL DEFAULT 'Pending',
  payment_method ENUM('COD','BANK') NOT NULL DEFAULT 'COD',
  payment_status ENUM('Unpaid','Paid') NOT NULL DEFAULT 'Unpaid',
+ payment_instructions JSON NULL,
  reported_not_received BOOLEAN NOT NULL DEFAULT FALSE,
  user_confirmed_received BOOLEAN NOT NULL DEFAULT FALSE,
  version INT UNSIGNED NOT NULL DEFAULT 1,
@@ -127,6 +128,27 @@ CREATE TABLE IF NOT EXISTS app_metadata (
  value TEXT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS app_settings (
+ name VARCHAR(80) PRIMARY KEY,
+ value TEXT NOT NULL,
+ updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS order_notifications (
+ id CHAR(32) PRIMARY KEY,
+ order_id VARCHAR(64) NOT NULL,
+ recipient VARCHAR(254) NOT NULL,
+ subject VARCHAR(200) NOT NULL,
+ html MEDIUMTEXT NOT NULL,
+ message TEXT NOT NULL,
+ status ENUM('sent','preview','failed') NOT NULL,
+ transport ENUM('file','smtp') NOT NULL,
+ created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+ sent_at DATETIME NULL,
+ FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+ INDEX (order_id,created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 START TRANSACTION;
 INSERT INTO products(id,name,description,description_html,price,original_price,category,subcategory,sizes,colors,rating,reviews_count,featured,trending,in_stock,stock_quantity) VALUES ('nike-air-max-alpha-5','Nike Air Max Alpha Trainer 5','Bản lĩnh tập luyện đỉnh cao với đệm Air Max êm ái. Thích hợp cho các bài tập tạ nặng, HIIT và tập luyện cường độ cao. Đế phẳng rộng tăng cường độ bám và ổn định tối đa.','<p>Bản lĩnh tập luyện đỉnh cao với đệm Air Max êm ái. Thích hợp cho các bài tập tạ nặng, HIIT và tập luyện cường độ cao. Đế phẳng rộng tăng cường độ bám và ổn định tối đa.</p>',2450000,2890000,'SportShoes','Giày tập luyện','[\"40\",\"41\",\"42\",\"43\",\"44\"]','[{\"name\":\"Red Bold\",\"hex\":\"#ff1e27\"},{\"name\":\"Pure Black\",\"hex\":\"#09090b\"},{\"name\":\"White Grey\",\"hex\":\"#d4d4d8\"}]',4.8,124,1,1,1,100);
 INSERT INTO product_images(product_id,url,position) VALUES ('nike-air-max-alpha-5','/images/shoe-running.jpg',0);
@@ -156,7 +178,7 @@ INSERT INTO products(id,name,description,description_html,price,original_price,c
 INSERT INTO product_images(product_id,url,position) VALUES ('nike-air-zoom-structure','/images/shoe-running.jpg',0);
 INSERT INTO products(id,name,description,description_html,price,original_price,category,subcategory,sizes,colors,rating,reviews_count,featured,trending,in_stock,stock_quantity) VALUES ('nike-pro-combat-leggings','Nike Pro Dri-FIT Tight Leggings','Quần bó cơ thể thao chuyên dụng dành cho nam. Chất vải co giãn 4 chiều hỗ trợ bó cơ, giảm mệt mỏi cơ bắp trong các bài tập tạ và chạy bộ cường độ cao.','<p>Quần bó cơ thể thao chuyên dụng dành cho nam. Chất vải co giãn 4 chiều hỗ trợ bó cơ, giảm mệt mỏi cơ bắp trong các bài tập tạ và chạy bộ cường độ cao.</p>',950000,NULL,'Clothing','Quần bó cơ','[\"S\",\"M\",\"L\",\"XL\"]','[{\"name\":\"Stealth Black\",\"hex\":\"#18181b\"}]',4.8,167,0,1,1,100);
 INSERT INTO product_images(product_id,url,position) VALUES ('nike-pro-combat-leggings','/images/hoodie.jpg',0);
-INSERT INTO users(id,email,password_hash,name,role) VALUES ('usr-1','admin@premium.com','$2y$12$cBrPP/ZmibFRsQXUxDkbHOETww/0C.d6I8thsjdCWPmEKm3apeA26','Admin Nike Store','admin');
-INSERT INTO users(id,email,password_hash,name,role) VALUES ('usr-2','user@premium.com','$2y$12$McTl3v8oTdhjo/C7Dn/mgOg6RAp5rHzIGiwWhvIrSyhI9UuUqVUIi','Khách hàng','user');
+INSERT INTO users(id,email,password_hash,name,role) VALUES ('usr-1','admin@premium.com','$2y$12$pA1JWO.vSY3ZgXVi94xYye9QT95k2bVzO/.qrsPnhC2Ahc/C1PSGO','Admin Nike Store','admin');
+INSERT INTO users(id,email,password_hash,name,role) VALUES ('usr-2','user@premium.com','$2y$12$BI3MsKV7wxdR7PCy7rPjjeiI7iYwKbn2kvSPLKuXmCdjyPu0DEagS','Khách hàng','user');
 INSERT INTO app_metadata(name,value) VALUES ('initial_seed','demo-sql-import');
 COMMIT;

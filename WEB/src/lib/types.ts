@@ -47,6 +47,40 @@ export interface Order {
   userConfirmedReceived: boolean;
   createdAt: string;
   version: number;
+  paymentInstructions?: BankSettings | null;
+  lastNotification?: MailNotification | null;
+}
+export interface BankSettings {
+  mode: 'demo' | 'real';
+  name: string;
+  account: string;
+  holder: string;
+  bin: string;
+  notice?: string;
+}
+export interface MailSettings {
+  transport: 'file' | 'smtp';
+  from: string;
+  adminEmail: string;
+  host: string;
+  port: number;
+  username: string;
+  encryption: 'tls' | 'ssl' | 'none';
+  passwordConfigured: boolean;
+}
+export interface MailNotification {
+  id: string;
+  recipient: string;
+  subject: string;
+  status: 'sent' | 'preview' | 'failed';
+  createdAt: string;
+}
+export interface QrPayment extends BankSettings {
+  amount: number;
+  reference: string;
+  orderId: string;
+  qrPayload: string | null;
+  qrImageUrl: string | null;
 }
 export interface ProductPage {
   products: Product[];

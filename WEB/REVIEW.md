@@ -2,13 +2,13 @@
 
 Ngày kiểm tra: 09/11/2026. Đối chiếu `Bai tap nhom (2).pdf`. Thư mục dự án chỉ giữ báo cáo và kết quả của bản hoàn thiện.
 
-**Phần kỹ thuật đã được hoàn thiện theo phạm vi website bán hàng trong đề và vượt qua toàn bộ 82 ca kiểm thử đã chạy.** Đây là kết luận dựa trên môi trường và ca kiểm tra bên dưới; không phải bảo đảm điểm chấm tuyệt đối hoặc khẳng định phần thông tin nhóm chưa cung cấp đã hoàn tất.
+**Phần kỹ thuật đã được hoàn thiện theo phạm vi website bán hàng trong đề và vượt qua toàn bộ 99 ca kiểm thử đã chạy, bao gồm QR demo và email.** Đây là kết luận dựa trên môi trường và ca kiểm tra bên dưới; không phải bảo đảm điểm chấm tuyệt đối hoặc khẳng định phần thông tin nhóm chưa cung cấp đã hoàn tất.
 
 ## Đối chiếu yêu cầu
 
 | Yêu cầu | Bản hiện tại | Minh chứng |
 | --- | --- | --- |
-| Website bán hàng cơ bản | Nike Store: danh mục, chi tiết, size/màu, giỏ, đơn | Luồng UI đặt COD và lịch sử đơn |
+| Website bán hàng cơ bản | Nike Store: danh mục, chi tiết, size/màu, giỏ, đơn, QR demo và email | Luồng UI đặt COD/QR, lịch sử đơn và Admin xem trước thư |
 | Backend PHP + MySQL | Toàn bộ auth, CRUD, upload, đơn hàng, tính giá và persistence ở PHP/PDO/MySQL | `backend/src/`, `/api/health`, schema SQL |
 | Frontend tùy ý | React/Next.js chỉ render và proxy sang PHP | `next.config.ts`, `src/lib/db.ts` không còn ghi JSON |
 | Trang người dùng và Admin | Có hai nhóm màn hình, quyền xác thực tại server | Test giả role/cookie và truy cập trái phép đều bị từ chối |
@@ -30,9 +30,9 @@ Ngày kiểm tra: 09/11/2026. Đối chiếu `Bai tap nhom (2).pdf`. Thư mục 
 | TypeScript `tsc --noEmit` | Thành công |
 | ESLint `--max-warnings=0` | 0 lỗi, 0 cảnh báo |
 | PHP syntax | Toàn bộ file PHP backend và test helper hợp lệ |
-| HTTP/API | **67/67 đạt** |
-| Browser Chrome/Playwright | **15/15 đạt** |
-| Tổng test tự động | **82 đạt, 0 lỗi, 0 bỏ qua, 0 flaky**, khoảng 56,3 giây |
+| HTTP/API | **80/80 đạt** |
+| Browser Chrome/Playwright | **19/19 đạt** |
+| Tổng test tự động | **99 đạt, 0 lỗi, 0 bỏ qua, 0 flaky**, khoảng 185,2 giây |
 | Import SQL mẫu độc lập | Thành công: 14 sản phẩm, 2 tài khoản demo, 0 đơn cá nhân |
 
 Log máy đọc được: `review-results/playwright-after.json`; log kiểm tra trong các file `build-after.txt`, `types-after.txt`, `lint-after.txt`, `php-lint.txt`. Có thể chạy lại qua hướng dẫn README. Ảnh giao diện và ảnh bìa slide nằm trong `review-results/after/`.
@@ -55,6 +55,8 @@ Runtime thực chạy: Windows, PHP 8.4.27, MySQL 8.4.13, Node.js 26.13.0, Next.
 - Giá bộ lọc lấy từ dữ liệu hiện hành; sửa liên kết chiến dịch hỏng; ảnh chính lưu local và ghi rõ minh họa.
 - Sửa lỗi HTML mô tả gây hydration; kiểm thử JavaScript runtime không còn lỗi trong các luồng đã chạy.
 - Bỏ credential SMTP khỏi README và `.env` frontend. Không đưa secret, import cũ hoặc outbox vào gói source.
+- Khôi phục QR theo từng đơn với ngân hàng ảo được ghi rõ không chuyển tiền thật; số tiền/nội dung lấy từ server, API giới hạn chủ đơn/Admin. Hỗ trợ cấu hình tài khoản thật sau này và snapshot ngân hàng không đổi khi Admin sửa cấu hình.
+- Bổ sung email tự động khi đặt/cập nhật đơn; Admin xem trước HTML, thêm lời nhắn, gửi lại và xem lịch sử. PHPMailer được kiểm thử bằng SMTP local, bao gồm lỗi gửi vẫn giữ đơn. Giao diện phân biệt sent/preview/failed, mật khẩu SMTP mã hóa và không trả qua API.
 
 ## Dữ liệu và phạm vi bàn giao
 
@@ -64,13 +66,13 @@ Có file `backend/database/demo.sql` chỉ chứa seed sản phẩm và tài kho
 
 ## Chạy nhanh trong VS Code
 
-Đã bổ sung cách chạy nhanh bằng **Go Live (Five Server)** và `CHAY-WEB.cmd`: khởi động PHP/MySQL/Next.js khi cần, mở lại website nếu đã chạy và tránh lỗi trùng cổng. Có thêm **4/4 kiểm tra launcher đạt** (`npm run test:launcher`) và đã thử khởi động mới trên cổng riêng; các kiểm tra này tách khỏi bộ 82 ca nghiệp vụ bên trên.
+Đã bổ sung cách chạy nhanh bằng **Go Live (Five Server)** và `CHAY-WEB.cmd`: khởi động PHP/MySQL/Next.js khi cần, mở lại website nếu đã chạy và tránh lỗi trùng cổng. Có thêm **4/4 kiểm tra launcher đạt** (`npm run test:launcher`) và đã thử khởi động mới trên cổng riêng; các kiểm tra này tách khỏi bộ 99 ca nghiệp vụ bên trên.
 
 ## Những việc cần thông tin hoặc dịch vụ bên ngoài
 
 1. Nhóm điền tên/MSSV, lớp, giảng viên và đánh giá đóng góp thực tế; phần thuyết trình phải do nhóm chuẩn bị và thực hiện. Chỉ tên đề tài Website Nike Store đã được người dùng xác nhận.
 2. Chủ tài khoản cần **thu hồi mật khẩu ứng dụng email cũ đã từng lộ** tại nhà cung cấp. Việc xóa khỏi source không thu hồi credential đó. Chưa thực hiện thao tác tài khoản ngoài.
-3. SMTP gửi thư thật và tài khoản ngân hàng cần cấu hình riêng nếu muốn sử dụng. Mặc định local dùng thư file và COD, không giả lập đã trả tiền.
-4. Chưa kiểm thử SMTP/cổng thanh toán/giao vận thật hoặc một triển khai public. Docker được cung cấp nhưng chưa chạy kiểm thử container vì Docker daemon trên máy không hoạt động. Các yêu cầu kỹ thuật được kiểm thử bằng runtime PHP/MySQL thật trên Windows.
+3. Đã điền email gửi do người dùng cung cấp trong cấu hình local; chưa có mật khẩu ứng dụng mới. Muốn gửi Gmail thật, Admin nhập riêng mật khẩu trong Cấu hình QR & Email, chọn SMTP, lưu và gửi thử. Mặc định local dùng thư mô phỏng và QR ngân hàng ảo/COD, không tự nhận đã trả tiền.
+4. Đã kiểm thử giao thức SMTP bằng máy chủ local, chưa gửi Gmail thật, chuyển tiền thật, giao vận hoặc triển khai public. Docker được cung cấp nhưng chưa chạy kiểm thử container vì Docker daemon trên máy không hoạt động. Các yêu cầu kỹ thuật được kiểm thử bằng runtime PHP/MySQL thật trên Windows.
 
 Các mục trên được ghi rõ thay vì gán trạng thái “100% toàn bộ bài” khi chưa có đủ bằng chứng. Phần chức năng trong phạm vi đã xác định và toàn bộ ca kiểm thử hiện tại đã đạt.

@@ -12,7 +12,7 @@ Frontend React/Next.js dùng để hiển thị giao diện và proxy yêu cầu
 | --- | --- |
 | Khách chưa đăng nhập | Xem/tìm/lọc sản phẩm, đăng ký, đăng nhập, khôi phục mật khẩu, đăng ký bản tin, giỏ hàng trên thiết bị |
 | Khách hàng | Quyền khách + đặt hàng, xem đơn của mình, hủy đơn Pending chưa thanh toán, xác nhận nhận hàng, báo chưa nhận hàng khi hệ thống ghi Delivered |
-| Admin | CRUD sản phẩm, upload ảnh, ẩn/hiện/xóa hàng loạt, xem mọi đơn, cập nhật trạng thái hợp lệ và xác nhận đã thu tiền |
+| Admin | CRUD sản phẩm, upload ảnh, ẩn/hiện/xóa hàng loạt, xem mọi đơn, cập nhật trạng thái hợp lệ, xác nhận đã thu tiền, cấu hình QR/SMTP, xem trước và gửi lại email cho khách |
 
 Giá trị `role` hoặc `userId` từ client không tạo ra quyền truy cập. Server lấy danh tính từ token phiên ngẫu nhiên, tra hash trong bảng sessions và đọc role từ users.
 
@@ -53,7 +53,7 @@ stateDiagram-v2
 
 - Không cho nhảy từ Pending đến Delivered hoặc quay ngược trạng thái.
 - COD: chỉ Admin xác nhận Paid sau khi đơn Delivered.
-- BANK: chỉ Admin xác nhận Paid sau khi kiểm tra giao dịch. Chỉ hiển thị lựa chọn chuyển khoản khi cấu hình tài khoản ngân hàng.
+- BANK: mặc định QR mô phỏng với ngân hàng ảo, không dùng chuyển tiền thật. Ngân hàng thật cấu hình trong Admin tạo VietQR theo tổng tiền server; mỗi đơn giữ snapshot tài khoản nhận. Chỉ Admin xác nhận Paid sau khi kiểm tra giao dịch; quét QR không tự đổi thành Paid.
 - Đơn đã trả tiền không hủy tự động; xử lý hoàn tiền cần cửa hàng kiểm tra.
 - Khi hủy hợp lệ, hoàn số lượng tồn đúng một lần. Hủy đơn không tự hiện lại sản phẩm Admin đã ẩn.
 - Phí giao hàng 40.000đ; miễn phí khi tạm tính **trên** 1.000.000đ.
@@ -71,6 +71,7 @@ stateDiagram-v2
 - Khóa `FOR UPDATE`, transaction InnoDB và phiên bản dữ liệu tránh vượt tồn và ghi đè chỉnh sửa cũ.
 - Xóa sản phẩm vẫn giữ snapshot lịch sử đơn; khóa ngoại item.product_id chuyển NULL.
 - Audit logs ghi tài khoản, hành động, đối tượng và thời điểm.
+- Mật khẩu SMTP mã hóa AES-256-GCM bằng khóa riêng ngoài public; API chỉ trả cờ đã cấu hình. Bản xem trước email escape dữ liệu khách/lời nhắn. Lịch sử gửi chỉ chủ đơn và Admin đọc; gửi lại cần Admin, CSRF và giới hạn tần suất. SMTP lỗi không rollback đơn đã lưu.
 
 ## Giới hạn đã xác định
 

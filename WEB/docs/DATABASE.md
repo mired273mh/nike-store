@@ -10,6 +10,7 @@ erDiagram
     USERS ||--o{ UPLOADS : uploads
     PRODUCTS ||--|{ PRODUCT_IMAGES : has
     ORDERS ||--|{ ORDER_ITEMS : contains
+    ORDERS ||--o{ ORDER_NOTIFICATIONS : notifies
     PRODUCTS o|--o{ ORDER_ITEMS : references
 ```
 
@@ -19,7 +20,7 @@ erDiagram
 | sessions | token_hash PK; user_id FK, cho phép NULL với phiên biểu mẫu; csrf_token; expires_at |
 | products | id PK; name; description; description_html; price/original_price; category; subcategory; sizes/colors JSON; flags; stock_quantity; version; timestamps |
 | product_images | id PK; product_id FK CASCADE; url; position |
-| orders | id PK; user_id FK; thông tin giao hàng snapshot; total; shipping_fee; status; payment_method; payment_status; khiếu nại/xác nhận; version; created_at |
+| orders | id PK; user_id FK; thông tin giao hàng và payment_instructions JSON snapshot; total; shipping_fee; status; payment_method; payment_status; khiếu nại/xác nhận; version; created_at |
 | order_items | id PK; order_id FK CASCADE; product_id FK SET NULL; tên/ảnh/giá snapshot; quantity; size; color |
 | password_resets | user_id PK/FK; code_hash; attempts; expires_at |
 | uploads | id PK; user_id FK; filename UNIQUE; mime_type; created_at |
@@ -27,6 +28,8 @@ erDiagram
 | newsletter_subscribers | email PK; created_at |
 | audit_logs | id PK; user_id; action; entity_id; created_at |
 | app_metadata | name PK; value; marker khởi tạo để không tự seed lại khi xóa hết sản phẩm |
+| app_settings | name PK; value; updated_at; cấu hình ngân hàng/SMTP, mật khẩu SMTP mã hóa AES-256-GCM |
+| order_notifications | id PK; order_id FK CASCADE; recipient; subject; html; message; status sent/preview/failed; transport; created_at DATETIME(6); sent_at |
 
 Giá tiền dùng số nguyên VND (`BIGINT UNSIGNED`), tránh sai số floating point. sizes/colors là dữ liệu biến thể đơn giản của sản phẩm; ảnh và item tách bảng để quản lý quan hệ và giữ lịch sử. Tồn kho hiện quản lý theo sản phẩm, không tách từng size/màu.
 
